@@ -55,12 +55,12 @@ end
 
 function result = iter_struct(data, level, addit)
     result = data;
-    for i = fields(data)'
+    for i = fieldnames(data)'
         fld = char(i);
         result.(fld) = recurse(data.(fld), level + 1, addit);
     end;
     
-    for i = fields(result)'
+    for i = fieldnames(result)'
         fld = char(i);
         if isstruct(result.(fld)) && isfield(result.(fld), kwd_parent())
             result.(fld) = inherit(result.(fld), result.(fld).(kwd_parent()), [], addit{1}, {});

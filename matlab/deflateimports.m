@@ -18,7 +18,6 @@ function result = recurse(data, level, addit)
     elseif isstruct(data)
         result = iter_struct(data, level, addit);
     else
-        %disp(data);
         result = data;
     end;
 end
@@ -48,7 +47,7 @@ end
 
 function result = iter_struct(data, level, addit)
     result = struct();
-    for i = fields(data)'
+    for i = fieldnames(data)'
         fld = char(i);
         result.(fld) = recurse(data.(fld), level + 1, addit);
     end;
@@ -59,7 +58,7 @@ function result = issingleimport_all(r)
 end
 
 function result = issingleimport(r)
-    result = isstruct(r) && length(fields(r)) == 1 && isfield(r, 'import');
+    result = isstruct(r) && length(fieldnames(r)) == 1 && isfield(r, 'import');
 end
 
 function result = addall(list1, list2)

@@ -74,7 +74,7 @@ end
 %
 function result = iter_struct(data, level, addit, makeords)
     result = struct();
-    for i = fields(data)'
+    for i = fieldnames(data)'
         fld = char(i);
         result.(fld) = recurse(data.(fld), level + 1, addit, makeords);
     end;

@@ -13,7 +13,7 @@ function dataset_plot(dataset)
 disp(' >> plotting bodys');
 NBody = length(dataset.body);
 for iBody = 1:NBody
-  
+
   % plot body (sensor configuration)
   figure();
   dataset_plot_body(dataset.body{iBody});

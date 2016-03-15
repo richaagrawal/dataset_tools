@@ -16,7 +16,7 @@ switch(sensorType)
   
   case 'imu'
     fileID = fopen(csvFilename);
-    csvRawData = textscan(fileID, '%u64,%f,%f,%f,%f,%f,%f', 'headerLines', 1);
+    csvRawData = textscan(fileID, '%u,%f,%f,%f,%f,%f,%f', 'headerLines', 1);
     data.t = csvRawData{1}';
     data.omega = [csvRawData{2}, csvRawData{3}, csvRawData{4}]';
     data.a = [csvRawData{5}, csvRawData{6}, csvRawData{7}]';
@@ -24,14 +24,14 @@ switch(sensorType)
     
   case 'camera'
     fileID = fopen(csvFilename);
-    csvRawData = textscan(fileID, '%u64,%s', 'headerLines', 1);
+    csvRawData = textscan(fileID, '%u,%s', 'headerLines', 1);
     data.t = csvRawData{1}';
     data.filenames = [csvRawData{2}]';
     fclose(fileID);
     
   case 'position'
     fileID = fopen(csvFilename);
-    csvRawData = textscan(fileID, '%u64,%f,%f,%f', 'headerLines', 1);
+    csvRawData = textscan(fileID, '%u,%f,%f,%f', 'headerLines', 1);
     data.t = csvRawData{1}';
     data.p_RS_R = [csvRawData{2}, csvRawData{3}, csvRawData{4}]';
     fclose(fileID);
@@ -39,7 +39,7 @@ switch(sensorType)
   case 'pose'
     fileID = fopen(csvFilename);
     csvRawData = ...
-      textscan(fileID, '%u64,%f,%f,%f,%f,%f,%f,%f', 'headerLines', 1);
+      textscan(fileID, '%u,%f,%f,%f,%f,%f,%f,%f', 'headerLines', 1);
     data.t = csvRawData{1}';
     data.p_RS_R = [csvRawData{2}, csvRawData{3}, csvRawData{4}]';
     data.q_RS = ...
@@ -50,7 +50,7 @@ switch(sensorType)
     fileID = fopen(csvFilename);
     csvRawData = ...
       textscan(fileID, ....
-      '%u64,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f', ...
+      '%u,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f', ...
       'headerLines', 1);
     data.t = csvRawData{1}';
     data.p_RS_R = [csvRawData{2}, csvRawData{3}, csvRawData{4}]';
@@ -76,7 +76,7 @@ switch(sensorType)
     fileIDUndistorted = fopen(csvFilenameUndistorted);
     csvRawDataUndistorted = ...
       textscan(fileIDUndistorted, ...
-      ['%u64', repmat(',%f', 1, NTargetPoints * 3), '\n'], ...
+      ['%u', repmat(',%f', 1, NTargetPoints * 3), '\n'], ...
       'headerLines', 0);
     X = [csvRawDataUndistorted{2:end}];
     NFrames = length(csvRawDataUndistorted{1});
@@ -92,7 +92,7 @@ switch(sensorType)
     fileIDPoseEstimates = fopen(csvFilenamePoseEstimates);
     csvRawDataPoseEstimates = ...
       textscan(fileIDPoseEstimates, ...
-      ['%u64', repmat(',%f', 1, 4*4), '\n'], ...
+      ['%u', repmat(',%f', 1, 4*4), '\n'], ...
       'headerLines', 0);
     X = [csvRawDataPoseEstimates{2:end}];
     NFrames = length(csvRawDataUndistorted{1});

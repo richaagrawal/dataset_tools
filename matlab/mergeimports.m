@@ -60,7 +60,7 @@ function result = iter_struct(data, level, addit, verb)
     result = struct();
     collected_imports = {};
     if any(verb == 1); fprintf([indent,'struct {\n']); end; % for debugging
-    for i = fields(data)'
+    for i = fieldnames(data)'
         fld = char(i);
         if any(verb == 1); fprintf([indent,' +-field ',fld,':\n']); end; % for debugging
         result.(fld) = recurse(data.(fld), level + 1, addit, verb);

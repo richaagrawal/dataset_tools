@@ -45,7 +45,7 @@ function result = ReadYaml(filename, nosuchfileaction, makeords, treatasdata, di
     end; 
 
     
-    ry = ReadYamlRaw(filename, 0, nosuchfileaction, treatasdata);
+    ry = ReadYamlRaw(filename, 1, nosuchfileaction, treatasdata);
     ry = deflateimports(ry);
     if iscell(ry) && ...
         length(ry) == 1 && ...

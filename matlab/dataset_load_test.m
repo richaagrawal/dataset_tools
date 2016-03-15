@@ -7,11 +7,12 @@
 % Status   : under review
 % ------------------------------------------------------------------------------
 
-addpath('quaternion');
+addpath('quaternion')
 
 % set dataset folder
 datasetPath = ...
-  '~/nas_mapbox/Datasets/Euroc-Datasets/ijrr_dataset_paper/vicon_room1/01_easy';
+  %'~/nas_mapbox/Datasets/Euroc-Datasets/ijrr_dataset_paper/vicon_room1/01_easy';
+   '../../V1_01_easy';
 
 disp(' ');
 disp([' > dataset_load_test [', datasetPath, ']']);

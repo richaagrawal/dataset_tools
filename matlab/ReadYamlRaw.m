@@ -34,7 +34,7 @@ function result = ReadYamlRaw(filename, verbose, nosuchfileaction, treatasdata)
         if not(ismember(dp, javaclasspath ('-dynamic')))
         	javaaddpath(dp); % javaaddpath clears global variables...!?
         end
-        import('org.yaml.snakeyaml.*');
+%        import('org.yaml.snakeyaml.*');
     end;
     
     setverblevel(verbose);
@@ -63,8 +63,8 @@ function result = load_yaml(inputfilename, nosuchfileaction, treatasdata)
     if isempty(tadf) && exist('treatasdata','var')
         tadf = treatasdata;
     end;
-   
-    yaml = org.yaml.snakeyaml.Yaml(); % It appears that Java objects cannot be persistent...!?
+  
+    yaml = javaObject('org.yaml.snakeyaml.Yaml');
     if ~tadf
         [filepath, filename, fileext] = fileparts(inputfilename);
         if isempty(filepath)
@@ -81,7 +81,7 @@ function result = load_yaml(inputfilename, nosuchfileaction, treatasdata)
         end;
     catch ex
         if ~tadf
-            cd(pathstore);
+            cd(pathstore)
         end;
         switch ex.identifier
             case 'MATLAB:fileread:cannotOpenFile'
@@ -114,8 +114,12 @@ function result = scan(r)
         result = scan_datetime(r);
     elseif isa(r, 'java.util.List')
         result = scan_list(r);
+    elseif isa(r, 'java.util.ArrayList')
+        result = scan_list(r);
     elseif isa(r, 'java.util.Map')
         result = scan_map(r);
+    elseif isa(r, 'java.util.LinkedHashMap')
+	result = scan_linkedHashMap(r);
     else
         error(['Unknown data type: ' class(r)]);
     end;
@@ -188,6 +192,32 @@ function result = scan_map(r)
         result={};
     end
 end
+
+%--------------------------------------------------------------------------
+% Transforms Java Map to MATLAB struct running scan(...) recursively for
+% content of every Map field.
+% When there is field, which is recognized to be the >import keyword<, an
+% attempt is made to import file given by the field content.
+%
+% The result of import is so far stored as a content of the item named 'import'.
+%
+function result = scan_linkedHashMap(r)
+    it = r.keySet().iterator();
+    while it.hasNext()
+        next = it.next();
+        i = next;
+        ich = char(i);
+        if iskw_import(ich)
+            result.(ich) = perform_import(r.get(ich));
+        else
+            result.(genvarname(ich)) = scan(r.get(ich));
+        end;
+    end;
+    if not(exist('result','var'))
+        result={};
+    end
+end
+
 
 %--------------------------------------------------------------------------
 % Determines whether r contains a keyword denoting import.
